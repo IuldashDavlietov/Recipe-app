@@ -1,9 +1,11 @@
 
-
+import Form from "./Form"
 export default function Header() {
   return (
-    <div>
-      
-    </div>
+    <header>
+      <h1>Food App</h1>
+      <Form/>
+   
+    </header>
   )
 }
