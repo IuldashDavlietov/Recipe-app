@@ -28,7 +28,7 @@ export default function Home() {
         setRecipes(res.data.hits);
       }
       catch (error) {
-        console.error(error)
+        console.error('Something wromg:', error)
       }
       finally {
         setLoading(false)
@@ -37,12 +37,18 @@ export default function Home() {
     fetchRecipes();
   }, [])
 
+
   return (
-    <div>
+    <>
       <Header />
-      <RecipeCard />
-    </div>
-  );
 
-
+      {loading ? (
+        <h2>Loading...</h2>
+      ) : (recipes.map((item) => (
+        <RecipeCard
+          key={item.recipe.uri}
+          recipe={item.recipe} />))
+      )}
+    </>
+  )
 }

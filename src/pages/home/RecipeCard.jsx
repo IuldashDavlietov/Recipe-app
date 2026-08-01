@@ -1,9 +1,18 @@
 
 
-export default function RecipeCard() {
+export default function RecipeCard({ recipe }) {
+
+  const {
+    label,
+    image,
+    calories
+  } = recipe
+
   return (
     <div>
-      HELLO Im RecipeCard
+      <p>{label}</p>
+      <img src={image} alt={label} />
+      <span>{Math.round(calories)}</span>
     </div>
   )
 }
