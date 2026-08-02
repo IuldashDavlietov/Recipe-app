@@ -3,7 +3,8 @@ import { useState } from "react";
 export default function Form({ setQuery, setMeal, loading }) {
 
   const [queryType, setQueryType] = useState('');
-  const [mealType, setMealType] = useState('Breakfast');
+  const [mealType, setMealType] = useState('');
+  const isFormEmpty = !queryType.trim() && !mealType
 
   const mealTypes = [
     'Breakfast',
@@ -26,11 +27,12 @@ export default function Form({ setQuery, setMeal, loading }) {
         onChange={(e) => setQueryType(e.target.value)} />
 
       <button type='submit'
-        disabled={loading}>{loading ? 'Searching...' : 'Search'}</button>
+        disabled={loading || isFormEmpty}>{loading ? 'Searching...' : 'Search'}</button>
 
       <select
         value={mealType}
         onChange={(e) => setMealType(e.target.value)}>
+        <option value=""> Select Category</option>
         {mealTypes.map((meal) => (
           <option key={meal} value={meal}>{meal}</option>
         ))}
