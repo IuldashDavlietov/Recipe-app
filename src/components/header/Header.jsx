@@ -1,11 +1,10 @@
+import Form from "./Form";
 
-import Form from "./Form"
-export default function Header() {
+export default function Header({ setQuery, setMeal, loading }) {
   return (
     <header>
       <h1>Food App</h1>
-      <Form/>
-   
+      <Form setQuery={setQuery} setMeal={setMeal} loading={loading}/>
     </header>
   )
 }
