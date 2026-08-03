@@ -13,7 +13,7 @@ export default function AppRouter() {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/about' element={<About />} />
-            <Route path='/details' element={<Details />} />
+            <Route path="/details/:id" element={<Details />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     )

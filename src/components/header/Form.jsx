@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { FormContainer, SearchInput, SelectCategory, SearchButton } from "./styleHeader";
 
-export default function Form({ setQuery, setMeal, loading }) {
+export default function Form({ fetchRecipes, loading }) {
 
   const [queryType, setQueryType] = useState('');
   const [mealType, setMealType] = useState('');
@@ -16,27 +17,26 @@ export default function Form({ setQuery, setMeal, loading }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setQuery(queryType);
-    setMeal(mealType);
+    fetchRecipes(queryType, mealType);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text"
+    <FormContainer onSubmit={handleSubmit}>
+      <SearchInput type="text"
         value={queryType}
         onChange={(e) => setQueryType(e.target.value)} />
 
-      <button type='submit'
-        disabled={loading || isFormEmpty}>{loading ? 'Searching...' : 'Search'}</button>
+      <SearchButton type='submit'
+        disabled={loading || isFormEmpty}>{loading ? 'Searching...' : 'Search'}</SearchButton>
 
-      <select
+      <SelectCategory
         value={mealType}
         onChange={(e) => setMealType(e.target.value)}>
         <option value=""> Select Category</option>
         {mealTypes.map((meal) => (
           <option key={meal} value={meal}>{meal}</option>
         ))}
-      </select>
-    </form>
+      </SelectCategory>
+    </FormContainer>
   )
 }
