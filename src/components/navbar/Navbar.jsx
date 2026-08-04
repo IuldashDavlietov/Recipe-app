@@ -1,6 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { NavWrapper, MenuWrapper, LogoLink, StyledNavLink } from "./NavbarStyle";
 
 export default function Navbar() {
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login')
+  }
+
   return (
     <NavWrapper>
       <LogoLink to="/">
@@ -17,7 +26,7 @@ export default function Navbar() {
           rel="noopener noreferrer"
         > Github
         </a>
-        <StyledNavLink to="/login">Logout</StyledNavLink>
+        <StyledNavLink to='/login' onClick={handleLogout}>Logout</StyledNavLink>
       </MenuWrapper>
     </NavWrapper>
   );

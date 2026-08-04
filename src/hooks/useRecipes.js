@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
 
+  const BASE_URL = 'https://api.edamam.com/api/recipes/v2';
+
 export const useRecipes = () => {
 
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-    const BASE_URL = 'https://api.edamam.com/api/recipes/v2';
 
-    const fetchRecipes = async (query, meal) => {
+    const fetchRecipes = async (query ='', meal='') => {
         if (!query.trim() && !meal) return;
         
         const params = {
