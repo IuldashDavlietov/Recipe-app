@@ -23,12 +23,11 @@ const Details = () => {
   if (!recipe) {
     return (
       <DetailsContainer>
-        <RecipeTitle>Рецепт не найден</RecipeTitle>
+        <RecipeTitle>Recipe  not found</RecipeTitle>
         <BackButton onClick={() => navigate('/')}>Home</BackButton>
       </DetailsContainer>
     );
   }
-
   return (
     <DetailsContainer>
       <HeaderArea>

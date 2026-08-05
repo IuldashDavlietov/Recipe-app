@@ -34,7 +34,6 @@ export const StyledLogoImg = styled.img`
   margin-top: -80px;
 `;
 
-// Заголовок
 export const FormTitle = styled.h2`
   color: #ffffff;
   font-size: 2.4rem;
@@ -61,6 +60,14 @@ export const StyledInput = styled.input`
     font-size: 0.95rem;
     letter-spacing: 1px;
   }
+`;
+
+export const ErrorMessage = styled.span`
+  color: #e74c3c;
+  font-size: 18px;
+  margin-top: 4px;
+  display: block;
+  text-align: left;
 `;
 
 export const SubmitButton = styled.button`
