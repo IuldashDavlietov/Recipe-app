@@ -41,6 +41,9 @@ export default function Login() {
         <StyledInput
           type="text"
           placeholder="User name"
+          name='text'
+          id='text'
+          autoComplete="current-text"
           value={user}
           onChange={(e) => setUser(e.target.value)}
         />
@@ -52,7 +55,10 @@ export default function Login() {
 
         <StyledInput
           type="password"
-          placeholder="Password"
+          placeholder="password"
+          autoComplete="current-password"
+          name="password"
+          id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

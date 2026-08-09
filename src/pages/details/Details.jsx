@@ -1,4 +1,6 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   DetailsContainer,
   HeaderArea,
@@ -12,72 +14,112 @@ import {
   ImageColumn,
   IngredientsColumn,
   SourceButton
-} from './styleDetails'; 
+} from './styleDetails';
 
 const Details = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const recipe = location.state?.recipe;
+  const [recipe, setRecipe] = useState(location.state?.recipe || null);
+  const [loading, setLoading] = useState(!location.state?.recipe);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  if (!recipe) {
-    return (
-      <DetailsContainer>
-        <RecipeTitle>Recipe  not found</RecipeTitle>
-        <BackButton onClick={() => navigate('/')}>Home</BackButton>
-      </DetailsContainer>
-    );
-  }
+  useEffect(() => {
+    const fetchRecipebyId = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.edamam.com/api/recipes/v2/${id}`,
+          {
+            params: {
+              type: 'public',
+              app_id: import.meta.env.VITE_APP_ID,
+              app_key: import.meta.env.VITE_APP_KEY,
+            }
+          }
+        );
+        setRecipe(res.data.recipe);
+      } catch (error) {
+        console.error(error);
+        if (error.response?.status === 429) {
+          setErrorMsg('Too many requests. Please try again in 1-2 minutes');
+        } else {
+          setErrorMsg('Recipe not found');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!recipe && id) {
+      fetchRecipebyId();
+    }
+  }, [id, recipe]);
+
   return (
     <DetailsContainer>
-      <HeaderArea>
-        <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
-        <RecipeTitle>{recipe.label}</RecipeTitle>
-      </HeaderArea>
+      {loading && (
+        <RecipeTitle>Loading recipe...</RecipeTitle>
+      )}
 
-      <DetailsCard>
-        <InfoColumn>
-          <h3>Nutrients</h3>
-          <CalorieBadge>🔥 {Math.round(recipe.calories)} kcal</CalorieBadge>
+      {!loading && errorMsg && (
+        <>
+          <RecipeTitle>{errorMsg}</RecipeTitle>
+          <BackButton onClick={() => navigate('/')}>← Home</BackButton>
+        </>
+      )}
 
-          {recipe.totalNutrients?.FAT && (
-            <p><strong>Fat:</strong> {Math.round(recipe.totalNutrients.FAT.quantity)}g</p>
-          )}
+      {!loading && !errorMsg && recipe && (
+        <>
+          <HeaderArea>
+            <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
+            <RecipeTitle>{recipe.label}</RecipeTitle>
+          </HeaderArea>
 
-          {recipe.totalNutrients?.CHOCDF && (
-            <p><strong>Carbs:</strong> {Math.round(recipe.totalNutrients.CHOCDF.quantity)}g</p>
-          )}
+          <DetailsCard>
+            <InfoColumn>
+              <h3>Nutrients</h3>
+              <CalorieBadge>🔥 {Math.round(recipe.calories)} kcal</CalorieBadge>
 
-          {recipe.totalNutrients?.PROCNT && (
-            <p><strong>Protein:</strong> {Math.round(recipe.totalNutrients.PROCNT.quantity)}g</p>
-          )}
+              {recipe.totalNutrients?.FAT && (
+                <p><strong>Fat:</strong> {Math.round(recipe.totalNutrients.FAT.quantity)}g</p>
+              )}
 
-          <TagGroup>
-            {recipe.healthLabels?.slice(0, 6).map((label, index) => (
-              <Tag key={index}>{label}</Tag>
-            ))}
-          </TagGroup>
-        </InfoColumn>
+              {recipe.totalNutrients?.CHOCDF && (
+                <p><strong>Carbs:</strong> {Math.round(recipe.totalNutrients.CHOCDF.quantity)}g</p>
+              )}
 
-        <ImageColumn>
-          <img src={recipe.image} alt={recipe.label} />
-        </ImageColumn>
+              {recipe.totalNutrients?.PROCNT && (
+                <p><strong>Protein:</strong> {Math.round(recipe.totalNutrients.PROCNT.quantity)}g</p>
+              )}
 
-        <IngredientsColumn>
-          <h3>Ingredients</h3>
-          <ol>
-            {recipe.ingredientLines?.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ol>
+              <TagGroup>
+                {recipe.healthLabels?.slice(0, 6).map((label, index) => (
+                  <Tag key={index}>{label}</Tag>
+                ))}
+              </TagGroup>
+            </InfoColumn>
 
-          {recipe.url && (
-            <SourceButton href={recipe.url} target="_blank" rel="noreferrer">
-              View Full Recipe ↗
-            </SourceButton>
-          )}
-        </IngredientsColumn>
-      </DetailsCard>
+            <ImageColumn>
+              <img src={recipe.image} alt={recipe.label} />
+            </ImageColumn>
+
+            <IngredientsColumn>
+              <h3>Ingredients</h3>
+              <ol>
+                {recipe.ingredientLines?.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ol>
+              {recipe.url && (
+                <SourceButton href={recipe.url} target="_blank" rel="noreferrer">
+                  View Full Recipe ↗
+                </SourceButton>
+              )}
+            </IngredientsColumn>
+          </DetailsCard>
+        </>
+      )}
     </DetailsContainer>
   );
 };
