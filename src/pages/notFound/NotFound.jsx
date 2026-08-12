@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import { NotFoundWrapper } from "./style";
+import { NotFoundWrapper, NotFoundSpan } from "./style";
+import { BackLink } from "./style";
 
 export default function NotFound() {
   return (
     < NotFoundWrapper>
-      <span>404 Not Found</span>
-      <Link to='/'>Home</Link>
+      <NotFoundSpan>404 Not Found</NotFoundSpan>
+      <BackLink to='/'>Home</BackLink>
     </ NotFoundWrapper>
   )
 }

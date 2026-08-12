@@ -51,7 +51,6 @@ export const SelectCategory =
     outline: none;
   `;
 
-// Кнопка поиска в цвет штанов
 export const SearchButton =
   styled.button`
     padding: 12px 24px;
